@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61508d12df9846b8ad566a0d94ad62a2, type: 3}
+  m_Name: AsteriodMediumSetting
+  m_EditorClassIdentifier: 
+  <Speed>k__BackingField: 0.7
+  <SpriteMedium>k__BackingField:
+  - {fileID: 21300000, guid: 4264d4cf6b15f4addab068d2d1036c32, type: 3}
+  - {fileID: 21300000, guid: 7a7eb2235cfca4fb3b28e8485eb444ad, type: 3}
+  - {fileID: 21300000, guid: 1749dc9d92c004cd78b3677ba1b869f3, type: 3}

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1afd65607f41416682a29f1fa0c054c0, type: 3}
+  m_Name: PlayerSetting
+  m_EditorClassIdentifier: 
+  <MoveForce>k__BackingField: 80
+  <RotationSpeed>k__BackingField: 200
+  <SpriteShip>k__BackingField: {fileID: 21300000, guid: 137596c097a3e45909b7f87aea079171, type: 3}
+  <SpriteTail>k__BackingField: {fileID: 21300000, guid: e7d5ffd283a21416393ccb251b14b710, type: 3}
