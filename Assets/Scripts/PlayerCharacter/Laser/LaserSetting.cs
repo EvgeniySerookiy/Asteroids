@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Player.Laser
+namespace PlayerCharacter.Laser
 {
     [CreateAssetMenu(fileName = "LaserSetting", menuName = "Settings/LaserSetting", order = 2)]
     public class LaserSetting : ScriptableObject

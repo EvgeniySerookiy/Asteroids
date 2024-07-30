@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using Zenject;
 
-namespace Player
+namespace PlayerCharacter
 {
-    public class GameInput : MonoBehaviour
+    public class GameInput : ITickable
     {
         public event Action OnAccelerate;
         public event Action OnBreakAcceleration;
@@ -12,7 +13,7 @@ namespace Player
         public event Action OnShootBullets;
         public event Action OnShootLaser;
 
-        private void Update()
+        public void Tick()
         {
             if(Input.GetKey(KeyCode.W))
                 OnAccelerate?.Invoke();

@@ -16,3 +16,4 @@ MonoBehaviour:
   <RotationSpeed>k__BackingField: 200
   <SpriteShip>k__BackingField: {fileID: 21300000, guid: 137596c097a3e45909b7f87aea079171, type: 3}
   <SpriteTail>k__BackingField: {fileID: 21300000, guid: e7d5ffd283a21416393ccb251b14b710, type: 3}
+  <PlayerPrefab>k__BackingField: {fileID: 8003136535604024468, guid: f54401fbc65864d3989a9c9ed2529da5, type: 3}

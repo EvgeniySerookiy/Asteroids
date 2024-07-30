@@ -1,16 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Enemy.Asteroid.AsteroidBig;
-using Enemy.Asteroid.AsteroidMedium;
-using Enemy.Asteroid.AsteroidSmall;
+using Enemy.Asteroid.AsteroidsBig;
+using Enemy.Asteroid.AsteroidsMedium;
+using Enemy.Asteroid.AsteroidsSmall;
 using Enemy.UFO;
-using UnityEngine;
 
 namespace Score
 {
-    public class ScoreController : MonoBehaviour
+    public class ScoreController
     {
-        [SerializeField] private ScoreView _scoreView;
+        private ScoreView _scoreView;
+        public ScoreController(ScoreView scoreView)
+        {
+            _scoreView = scoreView;
+        }
         
         private Dictionary<Type, int> _scores = new Dictionary<Type, int>
         {

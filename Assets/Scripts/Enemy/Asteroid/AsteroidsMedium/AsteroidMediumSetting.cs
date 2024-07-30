@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Enemy.Asteroid.AsteroidMedium
+namespace Enemy.Asteroid.AsteroidsMedium
 {
     [CreateAssetMenu(fileName = "AsteroidMediumSetting", menuName = "Settings/AsteroidMediumSetting", order = 3)]
     public class AsteroidMediumSetting : ScriptableObject

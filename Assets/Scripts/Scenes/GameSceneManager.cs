@@ -1,9 +1,8 @@
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Scenes
 {
-    public class GameSceneManager : MonoBehaviour
+    public class GameSceneManager
     {
         public void LoadGameScene()
         {

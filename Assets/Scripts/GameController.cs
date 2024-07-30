@@ -1,28 +1,35 @@
 using Enemy.Asteroid;
 using Enemy.UFO;
-using Player;
-using UnityEngine;
+using PlayerCharacter;
+using Scenes;
+using Zenject;
 
-public class GameController : MonoBehaviour
+public class GameController : ITickable, IInitializable
 {
-    [SerializeField] private PlayerFactory _playerFactory;
-    [SerializeField] private AsteroidFactory _asteroidFactory;
-    [SerializeField] private UFOFactory _ufoFactory;
-    [SerializeField] private GameOverScene _gameOverScene;
+    private GameOverScene _gameOverScene;
+    private AsteroidFactory _asteroidFactory;
+    private UFOFactory _ufoFactory;
+    private Player _player;
     
-
-    private void Awake()
+    public GameController(Player player, UFOFactory ufoFactory,
+        AsteroidFactory asteroidFactory, GameOverScene gameOverScene)
     {
-        _playerFactory.Initialize();
-        _asteroidFactory.Initialize();
-        _ufoFactory.Initialize(_playerFactory.Player);
-        _gameOverScene.Initialize(_playerFactory.Player);
+        _gameOverScene = gameOverScene;
+        _asteroidFactory = asteroidFactory;
+        _ufoFactory = ufoFactory;
+        _player = player;
     }
-
-    private void Update()
+    
+    public void Initialize()
     {
-        _playerFactory.Player.CheckScreenBoundaries();
-        _asteroidFactory.UpdateAsteroidFactory(_playerFactory.Player.transform.position);
-        _ufoFactory.UpdateUFOFactory(_playerFactory.Player);
+        _ufoFactory.Initialize(_player);
+        _gameOverScene.Initialize(_player);
+    }
+    
+    public void Tick()
+    {
+        _player.CheckScreenBoundaries();
+        _asteroidFactory.UpdateAsteroidFactory(_player.transform.position);
+        _ufoFactory.UpdateUFOFactory(_player);
     }
 }

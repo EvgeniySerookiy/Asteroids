@@ -2,23 +2,29 @@ using System.Collections;
 using Score;
 using UnityEngine;
 using UnityEngine.Pool;
+using Zenject;
 
-namespace Player.Laser
+namespace PlayerCharacter.Laser
 {
-    public class LaserFactory : MonoBehaviour
+    public class LaserFactory
     {
-        [SerializeField] private ScoreController _scoreController;
         
-        [SerializeField] private Laser _laserPrefab;
-        [SerializeField] private int _poolCapacity;
-        
-        public ObjectPool<Laser> LaserPool { get; private set; }
+        private readonly ScoreController _scoreController;
+        private readonly LaserFactorySetting _laserFactorySetting;
+        private readonly DiContainer _container;
+        private readonly MonoBehaviour _monoBehaviour;
         private bool _canShootLaser = true;
-
-        private void Awake()
+        public ObjectPool<Laser> LaserPool { get; }
+        
+        public LaserFactory(ScoreController scoreController, DiContainer container,
+            LaserFactorySetting laserFactorySetting, MonoBehaviour monoBehaviour)
         {
+            _container = container;
+            _laserFactorySetting = laserFactorySetting;
+            _scoreController = scoreController;
+            _monoBehaviour = monoBehaviour;
             LaserPool = new ObjectPool<Laser>(CreateLaser, OnGetLaser, OnReleaseLasert,
-                defaultCapacity: _poolCapacity);
+                defaultCapacity: _laserFactorySetting.PoolCapacity);
         }
         
         private void OnReleaseLasert(Laser laser)
@@ -35,7 +41,7 @@ namespace Player.Laser
 
         private Laser CreateLaser()
         {
-            return Instantiate(_laserPrefab);
+            return _container.InstantiatePrefabForComponent<Laser>(_laserFactorySetting.LaserPrefab);
         }
 
         public void GetLaser(Transform muzzle)
@@ -47,10 +53,10 @@ namespace Player.Laser
             var laser = LaserPool.Get();
             laser.transform.position = muzzle.position;
             laser.SetDirection(muzzle.up);
-            StartCoroutine(LaserShootCooldown(laser));
+            _monoBehaviour.StartCoroutine(LaserShootCooldown(laser));
         }
         
-        private IEnumerator LaserShootCooldown(global::Player.Laser.Laser laser)
+        private IEnumerator LaserShootCooldown(Laser laser)
         {
             yield return new WaitForSeconds(laser.GetLifeTime());
             LaserPool.Release(laser);

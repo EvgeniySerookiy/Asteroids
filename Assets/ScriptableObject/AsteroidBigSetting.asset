@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de14a61d4ee54e2fa232dd4eba91374b, type: 3}
   m_Name: AsteroidBigSetting
   m_EditorClassIdentifier: 
+  <AsteroidBigPrefab>k__BackingField: {fileID: -2596096115810450354, guid: 5225a354e8c06402083fc742e193b569, type: 3}
   <Speed>k__BackingField: 0.2
   <SpriteBig>k__BackingField:
   - {fileID: 21300000, guid: 417802931effb4044b69cd6b67c4048a, type: 3}

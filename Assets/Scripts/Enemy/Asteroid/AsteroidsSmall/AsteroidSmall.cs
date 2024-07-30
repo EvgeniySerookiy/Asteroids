@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Enemy.Asteroid.AsteroidSmall
+namespace Enemy.Asteroid.AsteroidsSmall
 {
     public class AsteroidSmall : ScreenBoundaryHandlerBase, IAsteroidBase, IEnemy
     {
@@ -26,14 +26,14 @@ namespace Enemy.Asteroid.AsteroidSmall
             _spriteRenderer.sprite = newSprite;
         }
         
-        private void Move()
-        {
-            transform.Translate(_direction * (_asteroidSmallSetting.Speed * Time.deltaTime));
-        }
-
         public void Split()
         {
             DestroyAsteroid();
+        }
+        
+        private void Move()
+        {
+            transform.Translate(_direction * (_asteroidSmallSetting.Speed * Time.deltaTime));
         }
 
         private void DestroyAsteroid()

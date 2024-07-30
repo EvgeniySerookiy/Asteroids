@@ -1,10 +1,11 @@
 using System;
-using UnityEngine;
 using Enemy;
-using Player.Bullet;
-using Player.Laser;
+using PlayerCharacter.Bullet;
+using PlayerCharacter.Laser;
+using UnityEngine;
+using Zenject;
 
-namespace Player
+namespace PlayerCharacter
 {
     public class Player : ScreenBoundaryHandlerBase
     {
@@ -18,22 +19,21 @@ namespace Player
         private SpriteRenderer _spriteRenderer;
         private PlayerSetting _playerSetting;
 
+        [Inject]
+        public void Construct(BulletFactory bulletFactory, LaserFactory laserFactory)
+        {
+            _bulletFactory = bulletFactory;
+            _laserFactory = laserFactory;
+        }
+        
         private void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        public void Initialize(BulletFactory bulletFactory, LaserFactory laserFactory, PlayerSetting playerSetting)
+        public void Initialize(PlayerSetting playerSetting)
         {
             ApplyPlayerSettings(playerSetting);
-            _bulletFactory = bulletFactory;
-            _laserFactory = laserFactory;
-
-        }
-
-        private void ApplyPlayerSettings(PlayerSetting playerSetting)
-        {
-            _playerSetting = playerSetting;
         }
 
         public void Accelerate()
@@ -85,6 +85,11 @@ namespace Player
 
                 _laserFactory.GetLaser(_muzzle);
             }
+        }
+        
+        private void ApplyPlayerSettings(PlayerSetting playerSetting)
+        {
+            _playerSetting = playerSetting;
         }
         
         private void OnTriggerEnter2D(Collider2D collider)

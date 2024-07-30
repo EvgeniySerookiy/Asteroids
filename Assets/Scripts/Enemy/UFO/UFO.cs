@@ -1,4 +1,5 @@
 using System.Collections;
+using PlayerCharacter;
 using UnityEngine;
 
 namespace Enemy.UFO
@@ -7,17 +8,21 @@ namespace Enemy.UFO
     {
         [SerializeField] private UFOSetting _ufoSetting;
 
-        private Player.Player _player;
+        private Player _player;
         private Camera _camera;
 
-        public void Initialize(Player.Player player)
+        private void Awake()
         {
             _camera = Camera.main;
+        }
+
+        public void Initialize(Player player)
+        {
             UpdatePlayer(player);
             StartCoroutine(MoveToRandomPoints());
         }
 
-        public void UpdatePlayer(Player.Player player)
+        public void UpdatePlayer(Player player)
         {
             _player = player;
         }
@@ -57,4 +62,3 @@ namespace Enemy.UFO
         }
     }
 }
-

@@ -1,23 +1,25 @@
-using Enemy.Asteroid.AsteroidBig;
+using Enemy.Asteroid.AsteroidsBig;
 using UnityEngine;
-using Random = UnityEngine.Random;
+using Zenject;
 
 namespace Enemy.Asteroid
 {
-    public class AsteroidFactory : MonoBehaviour
+    public class AsteroidFactory
     {
-        [SerializeField] private AsteroidBig.AsteroidBig _asteroidBigPrefab;
-        [SerializeField] private AsteroidBigSetting _asteroidBigSetting;
-        [SerializeField] private float _minDistanceFromPlayer = 2f;
-        [SerializeField] private int _maxCountAsteroids = 3;
-        
-        private Camera _camera;
+        private readonly AsteroidBigSetting _asteroidBigSetting;
+        private readonly AsteroidFactorySetting _asteroidFactorySetting;
+        private readonly DiContainer _container;
+        private readonly Camera _camera;
+
+        private AsteroidBig _asteroidBig;
         private Vector2 _playerPosition;
-        private AsteroidBig.AsteroidBig _asteroidBig;
         private int _countAsteroids;
 
-        public void Initialize()
+        public AsteroidFactory(AsteroidFactorySetting asteroidFactorySetting, AsteroidBigSetting asteroidBigSetting, DiContainer container)
         {
+            _asteroidFactorySetting = asteroidFactorySetting;
+            _asteroidBigSetting = asteroidBigSetting;
+            _container = container;
             _camera = Camera.main;
         }
 
@@ -25,21 +27,21 @@ namespace Enemy.Asteroid
         {
             _playerPosition = playerPosition;
             
-            if(_countAsteroids < _maxCountAsteroids)
+            if (_countAsteroids < _asteroidFactorySetting.MaxCountAsteroids)
             {
                 SpawnAsteroid();
             }
         }
-        
+
         private void SpawnAsteroid()
         {
-            Vector2 spawnPosition = GetRandomSpawnPosition();
-            int randomSprite = Random.Range(0, _asteroidBigSetting.SpriteBig.Length);
-            _asteroidBig = Instantiate(_asteroidBigPrefab, spawnPosition, Quaternion.identity);
-            _asteroidBig.SetNewSprite(_asteroidBigSetting.SpriteBig[randomSprite]);
+            int randomSpriteIndex = Random.Range(0, _asteroidBigSetting.SpriteBig.Length);
+            _asteroidBig = _container.InstantiatePrefabForComponent<AsteroidBig>(_asteroidBigSetting.AsteroidBigPrefab);
+            _asteroidBig.transform.position = GetRandomSpawnPosition();
+            _asteroidBig.transform.rotation = Quaternion.identity;
+            _asteroidBig.SetNewSprite(_asteroidBigSetting.SpriteBig[randomSpriteIndex]);
             _asteroidBig.OnKill += OnAsteroidDestroyed;
             _countAsteroids++;
-
         }
 
         private void OnAsteroidDestroyed()
@@ -61,10 +63,15 @@ namespace Enemy.Asteroid
                     Random.Range(-screenHeight, screenHeight)
                 );
             }
-            while ((Mathf.Abs(position.x) < _minDistanceFromPlayer && Mathf.Abs(position.y) < _minDistanceFromPlayer) ||
-                   Vector2.Distance(position, _playerPosition) < _minDistanceFromPlayer);
+            while (IsTooCloseToPlayer(position));
 
             return position;
+        }
+
+        private bool IsTooCloseToPlayer(Vector2 position)
+        {
+            return (Mathf.Abs(position.x) < _asteroidFactorySetting.MinDistanceFromPlayer && Mathf.Abs(position.y) < _asteroidFactorySetting.MinDistanceFromPlayer)
+                || Vector2.Distance(position, _playerPosition) < _asteroidFactorySetting.MinDistanceFromPlayer;
         }
     }
 }

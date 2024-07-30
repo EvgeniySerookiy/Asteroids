@@ -1,45 +1,60 @@
 using System.Collections;
+using PlayerCharacter;
 using UnityEngine;
+using Zenject;
 
 namespace Enemy.UFO
 {
-    public class UFOFactory : MonoBehaviour
+    public class UFOFactory
     {
-        [SerializeField] private UFO _ufoPrefab;
-        [SerializeField] private float _spawnAreaPadding;
-        [SerializeField] private float _timeOfRebirth;
+        private readonly UFOFactorySetting _ufoFactorySetting;
+        private readonly MonoBehaviour _monoBehaviour;
+        private readonly DiContainer _container;
 
-        private Player.Player _player;
+        private Player _player;
         private Camera _camera;
         private bool _isCoroutineRunning;
         private UFO _ufo;
 
-        public void Initialize(Player.Player player)
+        public UFOFactory(UFOFactorySetting ufoFactorySetting, MonoBehaviour monoBehaviour, DiContainer container)
+        {
+            _ufoFactorySetting = ufoFactorySetting;
+            _monoBehaviour = monoBehaviour;
+            _container = container;
+        }
+
+        public void Initialize(Player player)
         {
             _player = player;
             _camera = Camera.main;
-            StartCoroutine(SpawnUFO());
+            _monoBehaviour.StartCoroutine(SpawnUFO());
         }
 
-        public void UpdateUFOFactory(Player.Player player)
+        public void UpdateUFOFactory(Player player)
         {
             _player = player;
             if (_ufo != null)
             {
                 _ufo.UpdatePlayer(player);
             }
+
             if (_ufo == null && !_isCoroutineRunning)
             {
-                StartCoroutine(SpawnUFO());
+                _monoBehaviour.StartCoroutine(SpawnUFO());
             }
         }
 
         private IEnumerator SpawnUFO()
         {
             _isCoroutineRunning = true;
-            yield return new WaitForSeconds(_timeOfRebirth);
-            _ufo = Instantiate(_ufoPrefab, GetRandomSpawnPosition(), Quaternion.identity);
+            
+            yield return new WaitForSeconds(_ufoFactorySetting.TimeOfRebirth);
+            
+            _ufo = _container.InstantiatePrefabForComponent<UFO>(_ufoFactorySetting.UfoPrefab);
+            _ufo.transform.position = GetRandomSpawnPosition();
+            _ufo.transform.rotation = Quaternion.identity;
             _ufo.Initialize(_player);
+            
             _isCoroutineRunning = false;
         }
 
@@ -50,10 +65,10 @@ namespace Enemy.UFO
 
             return Random.Range(0, 4) switch
             {
-                0 => new Vector2(Random.Range(-screenWidth, screenWidth), screenHeight + _spawnAreaPadding),
-                1 => new Vector2(Random.Range(-screenWidth, screenWidth), -screenHeight - _spawnAreaPadding),
-                2 => new Vector2(-screenWidth - _spawnAreaPadding, Random.Range(-screenHeight, screenHeight)),
-                3 => new Vector2(screenWidth + _spawnAreaPadding, Random.Range(-screenHeight, screenHeight)),
+                0 => new Vector2(Random.Range(-screenWidth, screenWidth), screenHeight + _ufoFactorySetting.SpawnAreaPadding),
+                1 => new Vector2(Random.Range(-screenWidth, screenWidth), -screenHeight - _ufoFactorySetting.SpawnAreaPadding),
+                2 => new Vector2(-screenWidth - _ufoFactorySetting.SpawnAreaPadding, Random.Range(-screenHeight, screenHeight)),
+                3 => new Vector2(screenWidth + _ufoFactorySetting.SpawnAreaPadding, Random.Range(-screenHeight, screenHeight)),
                 _ => Vector2.zero,
             };
         }

@@ -1,7 +1,8 @@
-using Enemy.Asteroid.AsteroidBig;
-using Enemy.Asteroid.AsteroidMedium;
-using Enemy.Asteroid.AsteroidSmall;
+using Enemy.Asteroid.AsteroidsBig;
+using Enemy.Asteroid.AsteroidsMedium;
+using Enemy.Asteroid.AsteroidsSmall;
 using UnityEngine;
+using Zenject;
 using Button = UnityEngine.UI.Button;
 using Random = UnityEngine.Random;
 
@@ -9,19 +10,26 @@ namespace Scenes
 {
     public class StartScene : MonoBehaviour
     {
-        [SerializeField] private GameSceneManager _gameSceneManager;
+        private GameSceneManager _gameSceneManager;
         [SerializeField] private ScreenBoundaryHandlerBase[] _asteroids;
         [SerializeField] private AsteroidBigSetting _asteroidBigSetting;
         [SerializeField] private AsteroidMediumSetting _asteroidMediumSetting;
         [SerializeField] private AsteroidSmallSetting _asteroidSmallSetting;
         [SerializeField] private Button _button;
         [SerializeField] private int _maxAsteroids = 8;
-
+        
         private Camera _camera;
 
+        [Inject]
+        public void Construct(GameSceneManager gameSceneManager)
+        {
+            _gameSceneManager = gameSceneManager;
+        }
+        
         private void Awake()
         {
             _camera = Camera.main;
+            
             _button.onClick.AddListener(_gameSceneManager.LoadGameScene);
 
             for (int i = 0; i < _maxAsteroids; i++)
